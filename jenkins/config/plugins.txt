@@ -21,10 +21,8 @@ ws-cleanup:latest
 github-oauth:latest
 blueocean:latest
 authorize-project:latest
-docker-plugin:latest
 github:latest
 job-dsl:latest
-docker-workflow:latest
 jira-steps:latest
 nodejs:latest
 pipeline-utility-steps:latest

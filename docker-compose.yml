@@ -2,10 +2,11 @@ version: "3.7"
 
 services:
   jenkins:
+    image: jenkins
     build:
       context: ./jenkins
-      args:
-        DOCKER_GID: ${DOCKER_GID}
+      # args:
+      #   DOCKER_GID: ${DOCKER_GID}
       labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jenkins.rule=Host(`${HOST}`)"
@@ -19,97 +20,44 @@ services:
       - GITHUB_ACCESS_TOKEN=${GITHUB_ACCESS_TOKEN}
       - GITHUB_PRIVATE_KEY=${GITHUB_PRIVATE_KEY}
       - GITHUB_APP_ID=${GITHUB_APP_ID}
-      - DOCKER_PATH=${DOCKER_PATH}
+      # - DOCKER_PATH=${DOCKER_PATH}
+      - ORGANIZATIONS=${ORGANIZATIONS}
       - SSH_PRIVATE_FILE_PATH=${SSH_PRIVATE_FILE_PATH}
       - ADMIN_USERS=${ADMIN_USERS}
       - GITHUB_REPO_OWNER=${GITHUB_REPO_OWNER}
-      - JENKINS_VAULT_ROLE_ID=${JENKINS_VAULT_ROLE_ID}
-      - JENKINS_VAULT_SECRET_ID=${JENKINS_VAULT_SECRET_ID}
-      - MINIKUBE_KEY_PATH=${MINIKUBE_KEY_PATH}
-      - MINIKUBE_KEY_SECRET=${MINIKUBE_KEY_SECRET}
+      - JENKINS_URL=${JENKINS_URL}
+      # - JENKINS_VAULT_ROLE_ID=${JENKINS_VAULT_ROLE_ID}
+      # - JENKINS_VAULT_SECRET_ID=${JENKINS_VAULT_SECRET_ID}
+      # - MINIKUBE_KEY_PATH=${MINIKUBE_KEY_PATH}
+      # - MINIKUBE_KEY_SECRET=${MINIKUBE_KEY_SECRET}
     ports:
       - 8080:8080
-      - 50000:50000
+      - 50001:50000
     container_name: jenkins
     networks:
       - jenkins-net
-    volumes:
+    # volumes:
       # Folders need to have 1000:1000 ownership or use volume
-      - ./jenkins_home:/var/jenkins_home
-      - ./jenkins_logs:/var/log/jenkins
-      - /var/run/docker.sock:/var/run/docker.sock
+      # - ./jenkins_home:/var/jenkins_home
+      # - ./jenkins_logs:/var/log/jenkins
+      # - /var/run/docker.sock:/var/run/docker.sock
       # just mounting to ease development
-      - ./jenkins/config/casc_configs:/usr/share/jenkins/ref/casc_configs
+      # - ./jenkins/config/casc_configs:/usr/share/jenkins/ref/casc_configs
   
   
-  traefik:
-    image: "traefik:v2.5"
-    container_name: "traefik"
-    ports:
-      - "80:80"
-      - "8090:8080"
-    volumes:
-      - ./traefik/config/traefik.yml:/etc/traefik/traefik.yml 
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    networks:
-      - jenkins-net
+  # traefik:
+  #   image: "traefik:v2.5"
+  #   container_name: "traefik"
+  #   ports:
+  #     - "80:80"
+  #     - "8090:8080"
+  #   volumes:
+  #     - ./traefik/config/traefik.yml:/etc/traefik/traefik.yml 
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #   networks:
+  #     - jenkins-net
 
 
-  vault:
-    container_name: vault
-    image: vault:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.vault.rule=Host(`${HOST}`)"
-      - "traefik.http.routers.vault.rule=PathPrefix(`/`)"
-      # - "traefik.http.routers.vault.middlewares=vault-middleware"
-      # - "traefik.http.middlewares.vault-middleware.stripprefix.prefixes=/vault"
-      # - "traefik.http.middlewares.vault-middleware.stripprefix.forceSlash=false"
-      - "traefik.http.services.vault.loadbalancer.server.port=8200"
-    ports:
-      - "8200:8200"
-    depends_on:
-      - consul
-    environment:
-      - VAULT_ADDR=${VAULT_ADDR}
-     
-    cap_add:
-      - IPC_LOCK
-    entrypoint: vault server -config=/config/vault.hcl
-    # volumes_from:
-    #   - consul
-    volumes:
-      - ./consul/config:/config
-      - ./consul_data/data:/data
-    networks:
-      - jenkins-net
-
-  consul:
-    container_name: consul
-    image: consul:latest
-    ports:
-        - "8500:8500"
-        - "8300:8300"
-    volumes:
-        - ./consul/config:/config
-        - ./consul_data/data:/data
-    command: agent -server  -bind 0.0.0.0 -client 0.0.0.0 -bootstrap-expect=1 #-data-dir=/data
-    networks:
-      - jenkins-net
-  
-  ngrok:
-    container_name: ngrok
-    image: wernight/ngrok:latest
-    ports:
-      - "4040:4040"
-    environment:
-      - NGROK_AUTH=${NGROK_AUTH}
-      - NGROK_PORT=${NGROK_PORT}
-      - NGROK_DEBUG=${NGROK_DEBUG}
-      - NGROK_LOOK_DOMAIN=${HOST}
-    networks:
-      - jenkins-net
-  
 
 
 networks:

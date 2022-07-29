@@ -32,32 +32,32 @@ jenkins:
       allowGithubWebHookPermission: true
       authenticatedUserCreateJobPermission: true
       authenticatedUserReadPermission: true
-      organizationNames: ""
+      organizationNames: ${ORGANIZATIONS}
       useRepositoryPermissions: true    
 
-  clouds:
-    - docker:
-        name: "docker"
-        dockerApi:
-          dockerHost:
-            uri: "unix:///var/run/docker.sock"
-        templates:
-          - labelString: "docker-agent"
-            dockerTemplateBase:
-              image: "jenkins/agent"
-              # volumes:
-              #   - first:/hello
-              #   - second:/world
-              # environmentsString: |
-              #   hello=world
-              #   foo=bar
-            remoteFs: "/home/jenkins/agent"
-            connector:
-              attach:
-                user: "jenkins"
-            instanceCapStr: "10"
-            retentionStrategy:
-              idleMinutes: 1
+  # clouds:
+  #   - docker:
+  #       name: "docker"
+  #       dockerApi:
+  #         dockerHost:
+  #           uri: "unix:///var/run/docker.sock"
+  #       templates:
+  #         - labelString: "docker-agent"
+  #           dockerTemplateBase:
+  #             image: "jenkins/agent"
+  #             # volumes:
+  #             #   - first:/hello
+  #             #   - second:/world
+  #             # environmentsString: |
+  #             #   hello=world
+  #             #   foo=bar
+  #           remoteFs: "/home/jenkins/agent"
+  #           connector:
+  #             attach:
+  #               user: "jenkins"
+  #           instanceCapStr: "10"
+  #           retentionStrategy:
+  #             idleMinutes: 1
 
   crumbIssuer:
     standard:

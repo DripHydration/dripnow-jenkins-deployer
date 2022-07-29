@@ -1,12 +1,12 @@
 tool:
-  dockerTool:
-    installations:
-    - name: "docker-latest"
-      properties:
-      - installSource:
-          installers:
-            - fromDocker:
-                version: latest
+  # dockerTool:
+  #   installations:
+  #   - name: "docker-latest"
+  #     properties:
+  #     - installSource:
+  #         installers:
+  #           - fromDocker:
+  #               version: latest
   nodejs:
     installations:
     - name: "nodejs-17"

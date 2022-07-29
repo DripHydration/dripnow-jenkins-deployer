@@ -1,6 +1,6 @@
 FROM jenkins/jenkins:latest
 # This is the GID for the docker.sock file
-ARG DOCKER_GID
+# ARG DOCKER_GID
 ENV JENKINS_OPTS="--prefix=/jenkins --handlerCountMax=300 --logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war"
 ENV CASC_JENKINS_CONFIG="/usr/share/jenkins/ref/casc_configs"
 USER root
@@ -10,15 +10,18 @@ COPY --chown=jenkins:jenkins ./config/keys/converted-github-app.pem /tmp/convert
 COPY --chown=jenkins:jenkins ./config/DSL-jobs /tmp/DSL-jobs
 
 #### Mounting to ease development
-#COPY --chown=jenkins:jenkins ./config/casc.yaml /usr/share/jenkins/ref/casc.yaml
+# COPY --chown=jenkins:jenkins ./config/casc.yaml /usr/share/jenkins/ref/casc.yaml
+COPY --chown=jenkins:jenkins ./config/casc_configs /usr/share/jenkins/ref/casc_configs
 RUN mkdir /var/log/jenkins
 RUN mkdir /var/cache/jenkins
 RUN chown -R jenkins:jenkins /var/log/jenkins
 RUN chown -R jenkins:jenkins /var/cache/jenkins
-RUN groupadd -g ${DOCKER_GID} docker
-RUN usermod -a -G docker jenkins
+RUN chown -R jenkins:jenkins /usr/share/jenkins/ref/casc_configs
+RUN chown -R jenkins:jenkins  /var/jenkins_home
+# RUN groupadd -g ${DOCKER_GID} docker
+# RUN usermod -a -G docker jenkins
 
-RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+# RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
 # RUN apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 # RUN apt-get update && apt-get install vault
 ### Commented out for dev purposes, uncomment it for a normal run

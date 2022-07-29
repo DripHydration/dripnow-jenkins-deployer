@@ -1,6 +1,6 @@
 unclassified:
   location:
-    url: http://mordor:8080/jenkins
+    url: ${JENKINS_URL}
 
   githubpluginconfig:
     configs:
@@ -12,10 +12,10 @@ unclassified:
   ansiColorBuildWrapper:
     globalColorMapName: xterm
 
-  hashicorpVault:
-    configuration:
-      ##TODO change to version 2
-      engineVersion: 1  
-      vaultCredentialId: "vault-app-role"
-      vaultUrl: "http://mordor/"
-      prefixPath: "kv/jenkins"
+  # hashicorpVault:
+  #   configuration:
+  #     ##TODO change to version 2
+  #     engineVersion: 1  
+  #     vaultCredentialId: "vault-app-role"
+  #     vaultUrl: "http://mordor/"
+  #     prefixPath: "kv/jenkins"
