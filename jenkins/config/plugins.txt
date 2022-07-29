@@ -34,3 +34,4 @@ ansible:latest
 pipeline-github:latest
 pipeline-githubnotify-step:latest
 kubernetes:latest
+amazon-ecs:latest

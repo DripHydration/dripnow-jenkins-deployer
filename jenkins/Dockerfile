@@ -5,7 +5,7 @@ ENV JENKINS_OPTS="--prefix=/jenkins --handlerCountMax=300 --logfile=/var/log/jen
 ENV CASC_JENKINS_CONFIG="/usr/share/jenkins/ref/casc_configs"
 USER root
 COPY --chown=jenkins:jenkins ./config/plugins.txt /usr/share/jenkins/ref/plugins.txt
-COPY --chown=jenkins:jenkins ./config/keys/converted-github-app.pem /tmp/converted-github-app.pem
+COPY --chown=jenkins:jenkins ./config/keys/jenkins-driphydration.2022-07-29.private-key.pem /tmp/jenkins-driphydration.2022-07-29.private-key.pem
 # COPY --chown=jenkins:jenkins ./config/keys/known_hosts /var/jenkins_home/.ssh/known_hosts
 COPY --chown=jenkins:jenkins ./config/DSL-jobs /tmp/DSL-jobs
 

@@ -15,6 +15,8 @@ tool:
           installers:
             - nodeJSInstaller:
                 id: "NodeJS 17.1.0"
+                npmPackages: "yarn"
+                npmPackagesRefreshHours: 0
 
   ansibleInstallation:
     installations:

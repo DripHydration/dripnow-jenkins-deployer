@@ -35,7 +35,31 @@ jenkins:
       organizationNames: ${ORGANIZATIONS}
       useRepositoryPermissions: true    
 
-  # clouds:
+  clouds:
+    - ecs:
+        jenkinsUrl: "https://jenkins.dripecm.net/jenkins/"
+        allowedOverrides: "inheritFrom,label,memory,cpu,image"
+        name: "ECS-Fargate-cloud"
+        regionName: "us-east-1"
+        credentialsId: ""
+        cluster: ${ECS_AGENT_CLUSTER}
+        templates:
+                  - assignPublicIp: true
+                    cpu: "512"
+                    image: "jenkins/inbound-agent"
+                    label: "build-example"
+                    launchType: "FARGATE"
+                    memory: 0
+                    memoryReservation: 1024
+                    networkMode: "default"
+                    privileged: false
+                    remoteFSRoot: "/home/jenkins"
+                    securityGroups: ${AGENT_SECURITY_GROUP}
+                    sharedMemorySize: 0
+                    subnets: ${SUBNETS}
+                    templateName: "build-example"
+                    uniqueRemoteFSRoot: false
+                    enableExecuteCommand: false
   #   - docker:
   #       name: "docker"
   #       dockerApi:
